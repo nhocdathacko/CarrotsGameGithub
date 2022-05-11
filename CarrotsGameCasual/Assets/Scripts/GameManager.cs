@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    enum StateGame
+    {
+        GameOver,GamePlay,GameWait
+    }
     [SerializeField] private Transform[] posSpawnAnswer_Item;
     [SerializeField] private int lowerLimit, highestLimit;
 
@@ -41,7 +45,6 @@ public class GameManager : MonoBehaviour
     }
     public void NextTurn()
     {
-
         //int a = Mathf.RoundToInt(Random.Range(1f, 10f));
         //int b = Mathf.RoundToInt(Random.Range(1f, 10f));
         //int operation = Mathf.RoundToInt(Random.Range(1f, 4f));
@@ -167,5 +170,26 @@ public class GameManager : MonoBehaviour
                 break;
         }
         return kq;
+    }
+    /// <summary>
+    /// Trạng thái game
+    /// </summary>
+    /// <param name="state"></param>
+    private void SetState(StateGame state)
+    {
+        switch (state)
+        {
+            case StateGame.GamePlay:
+                //Màn hình TabToPlay sẽ invisible
+                Time.timeScale = 1f;
+                break;
+            case StateGame.GameWait:
+                //Màn hình TabToPlay sẽ visible
+                Time.timeScale = 0f;
+                break;
+            case StateGame.GameOver:
+                Time.timeScale = 0f;
+                break;
+        }
     }
 }

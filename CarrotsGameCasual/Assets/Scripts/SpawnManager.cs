@@ -16,6 +16,12 @@ public class SpawnManager : MonoBehaviour
         [SerializeField] private List<GameObject> activeObj;
         [SerializeField] private List<GameObject> inactiveObj;
 
+
+        /// <summary>
+        /// Tạo một đối tượng trong game
+        /// </summary>
+        /// <param name="_position">Vị trí đối tượng được tạo ra</param>
+        /// <returns>GameObject</returns>
         public GameObject SpawnObjInPool(Transform _position)
         {
             GameObject gameObj;
@@ -36,6 +42,11 @@ public class SpawnManager : MonoBehaviour
             }
             return gameObj;
         }
+
+        /// <summary>
+        /// Huỷ bỏ đối tượng trong game
+        /// </summary>
+        /// <param name="gameObject">Đối tượng cần huỷ bỏ</param>
         public void RemoveObjInPool(GameObject gameObject)
         {
             if (activeObj.Contains(gameObject))
@@ -59,22 +70,13 @@ public class SpawnManager : MonoBehaviour
 
     public ObjectPool itemPool;
     public ObjectPool answersPool;
-
+    /// <summary>
+    /// Singleton 
+    /// </summary>
     public static SpawnManager instance;
     private void Awake()
     {
         if (instance == null)
             instance = this;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
