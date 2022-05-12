@@ -24,16 +24,16 @@ public class DataManager : MonoBehaviour
     ///<param name="score">Score</param>
     public void SaveData(int level, int star, int score)
     {
-
         PlayerPrefs.SetInt("StarOfMap" + level, star);
         PlayerPrefs.SetInt("ScoreOfMap" + level, score);
         if (star > 0 || level <= 5)
         {
             //open next map
-            PlayerPrefs.SetInt("Map" + (level + 1), 1);
+            PlayerPrefs.SetInt("Map" + level, 1);
         }
         PlayerPrefs.Save();
 
+        
     }
 
     /// <summary>
@@ -54,7 +54,6 @@ public class DataManager : MonoBehaviour
         PlayerPrefs.Save();
         return maps;
     }
-
 }
 public class Map
 {

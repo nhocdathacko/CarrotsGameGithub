@@ -107,6 +107,7 @@ public class GameManager : MonoBehaviour
                     break;
                 //trường hợp *   
                 case 3:
+
                     //ở trường hợp phép nhân này ta phải random một giá trị nhưng phải xét điều kiện nó có chia hết hay không,không thì lặp cho đến khi tìm được số chia hết
                     do
                     {

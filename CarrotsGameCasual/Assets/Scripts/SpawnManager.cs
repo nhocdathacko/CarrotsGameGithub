@@ -15,6 +15,7 @@ public class SpawnManager : MonoBehaviour
 
         [SerializeField] private List<GameObject> activeObj;
         [SerializeField] private List<GameObject> inactiveObj;
+        
 
 
         /// <summary>
