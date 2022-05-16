@@ -1,148 +1,208 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     enum StateGame
     {
-        GameOver,GamePlay,GameWait
+        GameOver, GamePlay, GameWait
     }
     [SerializeField] private Transform[] posSpawnAnswer_Item;
     [SerializeField] private int lowerLimit, highestLimit;
 
-    public int number;
-    private readonly float time = 2f;
+    public Text txtQuestion;
+    public Text txtRightAnswer;
+
+    List<int> listParams;
+    List<int> paramAfter, opeAfter;
+    List<int> paramFull, operationFull;
+    List<Group> groups;
+    int firstParameter, secondParameter;
+    int indexGroup;
+    private readonly float time = 5f;
     private float curTime;
     private SpawnManager instanceSM;
-    private List<int> numbers;
-    private string[] numberShowText;
-    private string[] operationShowText;
-    private List<int> operations;
-    private int result;
+    private int rightAnswer;
     private void Awake()
     {
-        operations = new List<int>();
-        numbers = new List<int>();
+        listParams = new List<int>();
+        paramAfter = new List<int>();
+        opeAfter = new List<int>();
+        paramFull = new List<int>();
+        operationFull = new List<int>();
+        groups = new List<Group>();
     }
     // Start is called before the first frame update
     void Start()
     {
         curTime = time;
         instanceSM = SpawnManager.instance;
+        //HandleQuestion(3);
     }
 
     // Update is called once per frame
     void Update()
     {
-        HandleQuestion();
-        curTime -= Time.deltaTime;
-        if (curTime <= 0)
-        {
-            curTime = time;
-            NextTurn();
-        }
+        //curTime -= Time.deltaTime;
+        //if (curTime <= 0)
+        //{
+        //    HandleQuestion();
+        //    NextTurn();
+        //    curTime = time;
+        //}
     }
     public void NextTurn()
     {
-        //int a = Mathf.RoundToInt(Random.Range(1f, 10f));
-        //int b = Mathf.RoundToInt(Random.Range(1f, 10f));
-        //int operation = Mathf.RoundToInt(Random.Range(1f, 4f));
-        //string s = "5 + 6";
-        ////switch (operation)
-        ////{
-        ////    case 1:
-        ////        s = '+';
-        ////        break;
-        ////    case 2:
-        ////        s = '-';
-        ////        break;
-        ////    case 3:
-        ////        s = '*';
-        ////        break;
-        ////    case 4:
-        ////        s = '/';
-        ////        break;
-        ////}
-        //Debug.Log("a: " + a);
-        //Debug.Log("b: " + b);
-        //Debug.Log("c: " + s);
-        //var aa = a;
-        //var bb = b;
-        //var ss = s;
-        //var k = aa + bb;
-        //Debug.Log(k);
+
         //Initial Question
 
         //Initial Answer
-        //for (int i = 0; i < posSpawnAnswer_Item.Length; i++)
-        //{
-        //    instanceSM.answersPool.SpawnObjInPool(posSpawnAnswer_Item[i]);
 
-        //}
         //Initial Item
     }
-    private void HandleQuestion()
+    private void HandleQuestion(int numberOfOperation,int from,int to)
     {
-        numberShowText = new string[number - 1];
-        operationShowText = new string[number - 2];
-        //số có thể chia hết
-        int divide;
-        for (int i = 0; i < number; i++)
+        listParams.Clear(); 
+        paramAfter.Clear();
+        opeAfter.Clear();
+        paramFull.Clear();
+        operationFull.Clear();
+        groups.Clear();
+        indexGroup = -1;
+        //for numberOfOperation tìm nhân chia để gộp hoặc tách
+        for (int i = 0; i < numberOfOperation; i++)
         {
-            numbers.Add(-1);
-        }
-        //for cho từng phần tử phép tính
-        for (int i = 0; i < number - 1; i++)
-        {
-            //random tìm phép tính
-            int operation = 4;   
-            //trường hợp phép * / chia thì phải xử lý trước phép tính + -
-            //tìm 2 số thuộc phép tính đó
-            switch (operation)
+            int operation = RandomNumber(from, to);
+            operationFull.Add(operation);
+            //tìm giá trị chung x or / để gộp
+            if (i > 0)
             {
-                case 1:
-                    break;
-                case 2:
-                    break;
-                //trường hợp *   
-                case 3:
-
-                    //ở trường hợp phép nhân này ta phải random một giá trị nhưng phải xét điều kiện nó có chia hết hay không,không thì lặp cho đến khi tìm được số chia hết
-                    do
-                    {
-                        divide = RandomNumber(lowerLimit, highestLimit);
-                    } while (highestLimit % divide != 0);
-                    //gán giá trị vừa random(giá trị có thể chia hết) cho số trước của phép tính
-                    numbers[i] = divide;
-                    //tìm số sau của phép tính trên:
-                    //tìm ra kết quả của giới hạn cao nhất / số trước: "highestLimit / numbers[i]"
-                    //sau đó random giữa giới hạn thấp nhất với kết quả vừa tìm để có được số sau của phép tính trên
-                    numbers[i + 1] = RandomNumber(lowerLimit, highestLimit / numbers[i]);
-                    //thực hiện phép tính giữa 2 số vừa tìm là trong numbers
-                    result = Calculate(numbers[i], numbers[i + 1], operation);
-                    break;
-                //trường hợp /
-                case 4:
-                    //ở trường hợp phép chia này ta phải random một giá trị nhưng phải xét điều kiện nó có chia hết hay không,không thì lặp cho đến khi tìm được số chia hết
-                    do
-                    {
-                        divide = RandomNumber(lowerLimit, highestLimit);
-                    } while (divide % lowerLimit != 0);
-                    //random số trước của phép tính trên 
-                    numbers[i] = divide;
-                    //tìm số sau của phép tính trên:
-                    //tìm ra kết quả của số trước / giới hạn thấp nhất : "numbers[i] / lowerLimit"
-                    //sau đó random giữa giới hạn thấp nhất với kết quả vừa tìm để có được số sau của phép tính trên sau đó lặp cho đến khi số trước chia hết số sau
-                    do
-                    {
-                        numbers[i + 1] = RandomNumber(lowerLimit, numbers[i] / lowerLimit);
-                    } while (numbers[i] % numbers[i + 1] != 0);
-                    //thực hiện phép tính giữa 2 số vừa tìm là trong numbers
-                    result = Calculate(numbers[i], numbers[i + 1], operation);
-                    break;
+                if ((operationFull[i] == 1 || operationFull[i] == 2))
+                {
+                    //vế riêng (là phép + -)
+                    opeAfter.Add(operationFull[i]);
+                }
+                else if ((operationFull[i] == 3 || operationFull[i] == 4) && (operationFull[i - 1] == 3 || operationFull[i - 1] == 4))
+                {
+                    //gộp
+                    groups[indexGroup].operationsInGroup.Add(operationFull[i]);
+                }
+                else
+                {
+                    //tách
+                    indexGroup++;
+                    Group group = new Group(this);
+                    group.operationsInGroup.Add(operationFull[i]);
+                    group.indexGroup = i;
+                    groups.Add(group);
+                }
+            }
+            else
+            {
+                //i = 0
+                if (operation == 1 || operation == 2)
+                {
+                    opeAfter.Add(operation);
+                }
+                else
+                {
+                    indexGroup++;
+                    Group group = new Group(this);
+                    group.operationsInGroup.Add(operationFull[i]);
+                    group.indexGroup = i;
+                    groups.Add(group);
+                }
             }
         }
+        // đây là trường hợp mà trong 4 phép tính được random ban đầu không có + - chỉ có nhân chia 
+        if(opeAfter.Count == 0)
+        {
+            paramAfter.Add(RandomNumber(lowerLimit, highestLimit));
+        }
+        else
+        {
+            paramAfter = HandleLogicOperation(opeAfter, lowerLimit, highestLimit);
+        }
+        
+            bool y_n = false;
+        for (int i = 0; i < paramAfter.Count; i++)
+        {
+            for (int j = 0; j < groups.Count; j++)
+            {
+                if (groups[j].indexGroup == i)
+                {
+                    groups[j].GetAnswers(paramAfter[i]);
+                    y_n = true;
+                    foreach (var item in listParams)
+                    {
+                        paramFull.Add(item);
+                    }
+                    break;
+                }
+            }
+            if (!y_n)
+                paramFull.Add(paramAfter[i]);
+        }
+        for (int i = 0; i < paramFull.Count; i++)
+        {
+            if(i == paramFull.Count - 1)
+            {
+                ShowQuestionText(paramFull[i], 0);
+            }
+            else
+            {
+                ShowQuestionText(paramFull[i], operationFull[i]);
+            }
+        }
+        //xử lý lấy rightansnwer
+        for (int i = 0; i < paramFull.Count; i++)
+        {
+            if (i == 0)
+            {
+                rightAnswer = paramFull[i];
+            }
+            else
+            {
+                rightAnswer = Calculate(rightAnswer, paramFull[i], operationFull[i - 1]);
+            }
+        }
+        ShowRightAnswerText(rightAnswer);
+
+    }
+    private int FindOperation(List<int> _operation)
+    {
+        int index = RandomNumber(1, _operation.Count);
+        return _operation[index];
+    }
+    private void ShowQuestionText(int param, int operation)
+    {
+        string txtOperation = "";
+        switch (operation)
+        {
+            case 1:
+                txtOperation = "+";
+                break;
+            case 2:
+                txtOperation = "-";
+                break;
+            case 3:
+                txtOperation = "x";
+                break;
+            case 4:
+                txtOperation = ":";
+                break;
+            default:
+                txtOperation = "";
+                break;
+        }
+        txtQuestion.text += param.ToString();
+        txtQuestion.text += txtOperation;
+    }
+    private void ShowRightAnswerText(int right)
+    {
+        txtRightAnswer.text = right.ToString();
     }
     private int RandomNumber(int first, int second)
     {
@@ -172,6 +232,92 @@ public class GameManager : MonoBehaviour
         }
         return kq;
     }
+    private List<int> HandleLogicOperation(List<int> listOperation, int lowerLimit, int highestLimit)
+    {
+        listParams.Clear();
+        for (int i = 0; i < listOperation.Count; i++)
+        {
+            if (i == 0)
+            {
+                // *
+                if (listOperation[i] == 3)
+                {
+                    //ở trường hợp phép nhân này ta phải random một giá trị nhưng phải xét điều kiện nó có chia hết hay không,không thì lặp cho đến khi tìm được số chia hết
+                    do
+                    {
+                        firstParameter = Mathf.RoundToInt(Random.Range(lowerLimit, highestLimit));
+                    } while (highestLimit % firstParameter != 0);
+                    listParams.Add(firstParameter);
+                    firstParameter = LogicTwoParameters(firstParameter, listOperation[i], lowerLimit, highestLimit);
+                }
+                // :
+                else if (listOperation[i] == 4)
+                {
+                    //ở trường hợp phép nhân này ta phải random một giá trị nhưng phải xét điều kiện nó có chia hết hay không,không thì lặp cho đến khi tìm được số chia hết
+                    do
+                    {
+                        firstParameter = Mathf.RoundToInt(Random.Range(lowerLimit, highestLimit));
+                    } while (firstParameter % lowerLimit != 0);
+                    listParams.Add(firstParameter);
+                    firstParameter = LogicTwoParameters(firstParameter, listOperation[i], lowerLimit, highestLimit);
+                }
+                // + or -
+                else
+                {
+                    firstParameter = RandomNumber(lowerLimit, highestLimit);
+                    listParams.Add(firstParameter);
+                    firstParameter = LogicTwoParameters(firstParameter, listOperation[i], lowerLimit, highestLimit);
+                }
+            }
+            else
+            {
+                switch (listOperation[i])
+                {
+                    case 1:
+                        firstParameter = LogicTwoParameters(firstParameter, listOperation[i], lowerLimit, highestLimit);
+                        break;
+                    case 2:
+                        firstParameter = LogicTwoParameters(firstParameter, listOperation[i], lowerLimit, highestLimit);
+                        break;
+                    case 3:
+                        firstParameter = LogicTwoParameters(firstParameter, listOperation[i], lowerLimit, highestLimit);
+                        break;
+                    case 4:
+                        firstParameter = LogicTwoParameters(firstParameter, listOperation[i], lowerLimit, highestLimit);
+                        break;
+                }
+            }
+        }
+        return listParams;
+    }
+    //function này xử lý tìm tham số thứ 2 từ 1 vd:first (operation) second = lowewrLimit or highestLimit
+    //add tham số thứ 2 vào listParams trả về tham số 1
+    private int LogicTwoParameters(int first, int operation, int lowerLimit, int highestLimit)
+    {
+        int second = 0;
+        switch (operation)
+        {
+            case 1:
+                second = RandomNumber(lowerLimit, highestLimit - first);
+                break;
+            case 2:
+                second = RandomNumber(lowerLimit, first - lowerLimit);
+                break;
+            case 3:
+                second = Mathf.RoundToInt(Random.Range(lowerLimit, highestLimit / first));
+                break;
+            case 4:
+                do
+                {
+                    second = Mathf.RoundToInt(Random.Range(lowerLimit, first / lowerLimit));
+                } while (first % second != 0);
+                break;
+        }
+        listParams.Add(second);
+        firstParameter = Calculate(first, second, operation);
+        return firstParameter;
+    }
+
     /// <summary>
     /// Trạng thái game
     /// </summary>
@@ -191,6 +337,26 @@ public class GameManager : MonoBehaviour
             case StateGame.GameOver:
                 Time.timeScale = 0f;
                 break;
+        }
+    }
+
+    class Group
+    {
+        public List<int> operationsInGroup = new List<int>();
+        public int indexGroup;
+
+        private int lowerLimit;
+        private GameManager gameManager;
+
+        public Group(GameManager gameManager)
+        {
+            this.gameManager = gameManager;
+            lowerLimit = this.gameManager.lowerLimit;
+        }
+
+        public void GetAnswers(int resultGroup)
+        {
+            gameManager.HandleLogicOperation(operationsInGroup, lowerLimit, resultGroup);
         }
     }
 }

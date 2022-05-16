@@ -71,18 +71,7 @@ public class User : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Value value = collision.gameObject.GetComponent<Value>();
-        Debug.Log(value.GetValue());
-        if (value.GetValue() == "Right")
-        {
-            GameObject _gameObject = value.gameObject;
-            _gameObject.GetComponentInChildren<Text>().gameObject.SetActive(false);
-            _gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
-        }
-        else
-        {
-
-        }
+       
     }
 
 
