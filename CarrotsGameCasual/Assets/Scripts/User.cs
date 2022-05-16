@@ -71,8 +71,46 @@ public class User : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-       
+       if(collision.gameObject.tag == "item")
+        {
+            Item item = collision.gameObject.GetComponent<Item>();
+            InstantItem(item.getCategory());
+            Destroy(collision.gameObject);
+        }
+       if(collision.gameObject.tag == "answer")
+        {
+            Answer answer = collision.gameObject.GetComponent<Answer>();
+            Result(answer.getRightAnswer());
+        }
     }
 
+    /// <summary>
+    /// trợ giúp
+    /// </summary>
+    /// <param name="_category"></param>
+    private void InstantItem(int _category)
+    {
+        switch (_category)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }  
+    }
+    private void Result(bool _rightAnswer)
+    {
+        if(_rightAnswer == true)
+        {
 
+        }
+        else
+        {
+
+        }
+    }
 }
