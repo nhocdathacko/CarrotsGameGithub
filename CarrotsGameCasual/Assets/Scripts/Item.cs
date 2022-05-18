@@ -5,12 +5,13 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     private new Rigidbody2D rigidbody2D;
-    GameObject answer1, answer2;
     public int category;
+    User user;
     // Start is called before the first frame update
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
+        user = FindObjectOfType<User>();
         rigidbody2D.velocity = new Vector2(0, -2);
     }
 
@@ -45,25 +46,15 @@ public class Item : MonoBehaviour
     /// </summary>
     public void HalfAnswer()
     {
-        Destroy(answer1);
-        Destroy(answer2);
+        
     }
-    /// <summary>
-    /// Truyền đáp án cần xóa vô cho HalfAnswer
-    /// </summary>
-    /// <param name="_answer1"></param>
-    /// <param name="_answer2"></param>
-    internal void Half(GameObject _answer1, GameObject _answer2)
-    {
-        answer1 = _answer1;
-        answer2 = _answer2;
-    }
+
     /// <summary>
     /// Khiên bảo vệ
     /// </summary>
     public void Shield()
     {
-
+        user.Shield(true);
     }
     /// <summary>
     /// đổi đáp án

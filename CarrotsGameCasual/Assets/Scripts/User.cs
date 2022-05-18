@@ -10,7 +10,7 @@ public class User : MonoBehaviour
     private Rigidbody2D rgbody;
     private int curIndexPos;
     private Vector3 origin;
-    private bool touch;
+    private bool touch, haveShiled = false;
     private void Awake()
     {
         rgbody = GetComponent<Rigidbody2D>();
@@ -73,9 +73,9 @@ public class User : MonoBehaviour
     {
        if(collision.gameObject.tag == "item")
         {
-            Item item = collision.gameObject.GetComponent<Item>();
-            InstantItem(item.getCategory());
-            Destroy(collision.gameObject);
+            // test
+            collision.transform.position = new Vector3(transform.position.x + 2, transform.position.y - 0.5f);
+            collision.gameObject.GetComponent<Item>().Move(0);
         }
        if(collision.gameObject.tag == "answer")
         {
@@ -84,24 +84,7 @@ public class User : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// trợ giúp
-    /// </summary>
-    /// <param name="_category"></param>
-    private void InstantItem(int _category)
-    {
-        switch (_category)
-        {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-        }  
-    }
+    
     private void Result(bool _rightAnswer)
     {
         if(_rightAnswer == true)
@@ -110,7 +93,21 @@ public class User : MonoBehaviour
         }
         else
         {
+            if(haveShiled == false)
+            {
+                // GameOver
+            }
+            else
+            {
+                // tiếp tục chơi
+            }
 
         }
+    }
+
+    // truyền khiên bảo vệ từ item
+    internal void Shield(bool _haveShiled)
+    {
+        haveShiled = _haveShiled;
     }
 }

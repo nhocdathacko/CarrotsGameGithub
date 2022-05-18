@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+
 
 public class Answer : MonoBehaviour
 {
     private new Rigidbody2D rigidbody2D;
 
-    public Text answer;
+    public TextMeshProUGUI answer;
     private bool rightAnswer;
     // Start is called before the first frame update
     void Start()
