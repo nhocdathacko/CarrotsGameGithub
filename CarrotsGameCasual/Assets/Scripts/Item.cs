@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Item : MonoBehaviour
 {
     private new Rigidbody2D rigidbody2D;
     public int category;
+    public Image image;
     User user;
     // Start is called before the first frame update
     void Start()
@@ -22,7 +24,7 @@ public class Item : MonoBehaviour
     }
     internal void Init(int _category)
     {
-        
+        category = _category;
     }
     internal void Move(float _speed)
     {
@@ -31,6 +33,24 @@ public class Item : MonoBehaviour
     internal void Die()
     {
         Destroy(gameObject);
+    }
+    private void setItem()
+    {
+        switch (category)
+        {
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+        }
     }
     /// <summary>
     /// 1. 50/50   2. x2   3. đổi câu hỏi  4. khiên
